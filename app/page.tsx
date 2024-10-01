@@ -1,6 +1,15 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import {
+  Dispatch,
+  forwardRef,
+  LegacyRef,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { LeadsSidebar, viewsType } from "@/components/LeadsSidebar";
 import { arrayMove, arrayRemove, List } from "react-movable";
 import Image from "next/image";
@@ -228,6 +237,13 @@ export default function Home() {
     losts,
   ]);
 
+  const FilterRowWrapper = forwardRef(function FilterRowWrapper(
+    props: any,
+    ref: LegacyRef<HTMLTableRowElement>
+  ) {
+    return <tr ref={ref}>{props.children}</tr>;
+  });
+
   return (
     <main className="min-w-full flex flex-col items-start justify-start bg-gray-50 gap-12">
       <div className="w-full flex items-start gap-4 pr-4">
@@ -270,16 +286,16 @@ export default function Home() {
                 </table>
               )}
               renderItem={({ value, props, index }) => {
-                if (!value) return null;
                 const { key, ...rest } = props;
+                if (!value) return null;
                 return (
-                  <tr
+                  <FilterRowWrapper
+                    key={`${index}_${value.id}_${value.name}`}
+                    className="text-gray-800"
                     {...rest}
-                    key={`${index}_${value}`}
-                    className="text-gray-500"
                   >
                     <td
-                      className="whitespace-nowrap rounded-md py-4 pl-2 pr-4 text-xs"
+                      className="whitespace-nowrap rounded-md py-4 pl-2 pr-4 text-xs text-gray-800"
                       onMouseDown={() => handleMouseDown(value?.id)}
                     >
                       <div className="flex items-center gap-2">
@@ -293,10 +309,10 @@ export default function Home() {
                         {value?.name}
                       </div>
                     </td>
-                    <td className="whitespace-nowrap rounded-md py-4 pl-2 pr-4 text-xs">
+                    <td className="whitespace-nowrap rounded-md py-4 pl-2 pr-4 text-xs text-gray-800">
                       {value?.id}
                     </td>
-                    <td className="whitespace-nowrap rounded-md py-4 pl-2 pr-4 text-xs">
+                    <td className="whitespace-nowrap rounded-md py-4 pl-2 pr-4 text-xs text-gray-800">
                       <Image
                         src={avatarExample}
                         alt={`owner-icon-${value?.name}`}
@@ -305,7 +321,7 @@ export default function Home() {
                         className="cursor-pointer"
                       />
                     </td>
-                  </tr>
+                  </FilterRowWrapper>
                 );
               }}
             />

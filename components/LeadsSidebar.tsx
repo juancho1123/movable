@@ -1,4 +1,4 @@
-import React from "react";
+import React, { LegacyRef } from "react";
 import Badge from "./Badge";
 
 interface SidebarItemProps extends React.HTMLAttributes<HTMLElement> {
